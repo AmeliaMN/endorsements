@@ -1,6 +1,6 @@
 # Newspaper presidential endorsements, 1980-
 
-Forked from Noah Veltman's [github repo](https://github.com/veltman/endorsements, attempting to reproduce [Noah's post](http://noahveltman.com/endorsements/)
+Forked from Noah Veltman's [github repo](https://github.com/veltman/endorsements), attempting to reproduce [Noah's post](http://noahveltman.com/endorsements/)
 
 
 # From Noah:

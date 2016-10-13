@@ -1,0 +1,58 @@
+---
+title: "Ordered endorsements"
+author: "Amelia McNamara"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Endorsements
+
+Based on Noah Veltman's [endorsements](http://noahveltman.com/endorsements/). 
+
+
+```{r, message=FALSE}
+library(readr)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(forcats)
+library(stringr)
+```
+
+```{r, warning=FALSE, message=FALSE}
+endorsements <- read_csv("endorsements.csv")
+candidates <- data.frame(years = seq(from=1972, to=2016, by=4), R = c("Nixon", "Ford", "Reagan", "Reagan", "Bush", "Bush", "Dole", "Bush", "Bush", "McCain", "Romney", "Trump"), D = c("McGovern", "Carter", "Carter", "Mondale", "Dukakis", "Clinton", "Clinton", "Gore", "Kerry", "Obama", "Obama", "Clinton"))
+candidates <- gather(candidates, key=years, value=party)
+names(candidates) <- c("year", "party", "endorsed")
+
+joined <- left_join(endorsements, candidates) %>%
+  filter(year>1976) %>%
+  mutate(party = if_else(is.na(party), endorsed, party)) %>%
+  mutate(party = if_else(str_detect(party, "/"), "Split", party)) %>%
+  mutate(party = if_else(str_detect(party, "Not"), "Anti-endorsement", party)) %>%
+  mutate(party = if_else(party %in% c("D", "R", "Split", "Unknown", "None", "Anti-endorsement"), party, "Other")) %>%
+  mutate(party = factor(party)) %>%
+  mutate(party = fct_relevel(party, "R", "D")) %>%
+  select(publication, year, party)
+
+ggplot(joined, aes(y=publication, x=year, fill=party)) + geom_raster() + scale_fill_manual(values=c("Red", "Blue", "Dark grey", "Light grey", "Yellow", "Purple", NA))
+
+  
+ordering <- spread(joined, key=year, value=party) %>%
+  arrange(`1980`, `1984`,`1988`, `1992`, `1996`, `2000`, `2004`, `2008`, `2012`, `2016`) 
+
+joined <- joined %>%
+  mutate(publication = factor(publication)) %>%
+  mutate(publication =  fct_relevel(publication, ordering$publication))
+
+
+p <- ggplot(joined, aes(y=publication, x=year, fill=party)) + geom_raster() + scale_fill_manual(values=c("Red", "Blue", "Dark grey", "Light grey", "Yellow", "Purple", NA))
+p
+```
+
+```{r, eval=FALSE}
+ggsave("arranged.jpg", width = 8, height=12)
+```

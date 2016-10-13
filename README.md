@@ -1,6 +1,9 @@
 # Newspaper presidential endorsements, 1980-
 
-See also: [http://noahveltman.com/endorsements/](http://noahveltman.com/endorsements/)
+Forked from Noah Veltman's [github repo](https://github.com/veltman/endorsements, attempting to reproduce [Noah's post](http://noahveltman.com/endorsements/)
+
+
+# From Noah:
 
 Data on who the top ~100 US newspapers by circulation endorsed for president in each election from 1980 through 2016. Additions/corrections welcome.
 
